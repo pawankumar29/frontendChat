@@ -1,0 +1,75 @@
+/* SleepTracker.css */
+.sleep-tracker-container {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .sleep-entry {
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  form input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  form button {
+    padding: 0.5rem 1rem;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  form button:hover {
+    background-color: #0056b3;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+  }
+  
+  li {
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  li div {
+    margin: 0.5rem 0;
+  }
+  
+  button{
+    width:200px;
+    background-color:burlywood;
+    height:53px;
+
+
+}
+  
+  button.edit-button {
+    background-color: #007BFF;
+  }
+  
+  button.delete-button:hover {
+    background-color: #FF0000;
+  }
+  

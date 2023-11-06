@@ -1,0 +1,20 @@
+
+.App{
+    display:flex;
+    flex-direction: column;
+    margin-top: 220px;
+}
+
+.App button{
+    width:200px;
+    height:40px;
+    margin:auto;
+    background-color: aqua;
+}
+
+.App input{
+    height:42px;
+    width:60%;
+    margin:auto;
+
+}
