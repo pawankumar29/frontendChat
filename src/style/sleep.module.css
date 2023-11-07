@@ -1,0 +1,31 @@
+
+.edit {
+    display:flex;
+    float:right
+
+}
+.edit li{
+    display:flex;
+    flex-direction: column;
+    padding:10px;
+    border: 1px solid blue;
+    background-color: antiquewhite;
+    color: black;
+    font-weight: 900;
+}
+
+.page{
+    position:absolute;
+    top:80vh;
+    left:45vw;
+}
+
+.setCol{
+width:100%;
+ display:flex;
+ font-size: large;
+ margin: auto;
+ align-items: center;
+ justify-content: space-between;
+
+}

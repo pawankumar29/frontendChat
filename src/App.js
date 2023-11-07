@@ -6,6 +6,9 @@ import SleepTracker from './components/homepage';
 import Chat from './components/chat';
 import PrivateRoute from './components/privateRoute';
 import Logout from './components/logout';
+import Sleep from './components/sleep';
+
+
 
 function App() {
   return (
@@ -16,7 +19,7 @@ function App() {
          <Route path="/" element={<Signup/>}/>
          
           {/* <Route path="/sleep" element={<SleepTracker/>}  />   */}
-          <Route path="/sleep" element={<PrivateRoute Component={SleepTracker}  />}/>  
+          <Route path="/sleep" element={<PrivateRoute Component={Sleep}  />}/>  
 
           <Route path="/login" element={<Login/>}  />  
 

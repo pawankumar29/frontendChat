@@ -3,17 +3,19 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import '../style/page.css';
 
-function Pagination() {
+function Pagination(props) {
   const [offset, setOffset] = useState(0);
   const [data, setData] = useState([]);
-  const [perPage] = useState(1);
+  const [perPage] = useState(2);
   const [pageCount, setPageCount] = useState(0);
 
+const {Comp}=props;
 
   const userData = localStorage.getItem("userData");
   const dataa = JSON.parse(userData);
 console.log("userDataIn==>",data);
   const id=dataa?.data.id;
+
 
   const getData = async () => {
     const res = await      
@@ -23,8 +25,9 @@ console.log("userDataIn==>",data);
        }
     }) 
 
-    console.log("")
     const data = res.data.data;
+    console.log("dataInPage===>",res.data);
+
 
     const pageNumber = offset * perPage;
     const slice = data.slice(pageNumber, pageNumber + perPage);
@@ -36,7 +39,8 @@ console.log("userDataIn==>",data);
     //   </div>
     // ));
 
-    setData(slice);
+    console.log("slice===>",slice);
+      Comp(slice);
     setPageCount(Math.ceil(data.length / perPage));
   };
 
@@ -51,7 +55,6 @@ console.log("userDataIn==>",data);
 
   return (
     <div className="App">
-      {data}
       <ReactPaginate
         previousLabel={"prev"}
         nextLabel={"next"}

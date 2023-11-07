@@ -15,6 +15,9 @@ console.log("userDataIn==>",data);
   const id=data?.data.id;
 
 
+   // state to manage  the time 
+   const [isEdit,setEdit]=useState(0);
+
   // State to manage sleep entries
   const [sleepEntries, setSleepEntries] = useState([ {id:"",date:"",sleepTime:"",wakeUpTime:"",totalSleepDuration:""}]);
 
@@ -30,6 +33,8 @@ console.log("userDataIn==>",data);
     wakeUpTime: '',
     totalSleepDuration: '',
   });
+  console.log("dataInHome==>",sleepEntries);
+
   const [expandedEntryId, setExpandedEntryId] = useState(null);
 
   const headers={
@@ -61,13 +66,17 @@ console.log("userDataIn==>",data);
  
 
   const addSleepEntry = () => {
+
+
     const newEntryData = {
         userId: id,
         sleep_time: newEntry.sleepTime,
         wake_up_time: newEntry.wakeUpTime,
         total_time: newEntry.totalSleepDuration,
       };
+      console.log("newOne=====>",newEntryData);
 
+      if(!isEdit){
       axios.post('http://localhost:5166/v1/record', newEntryData,{headers}) // Adjust the API endpoint
         .then((response) => {
           // Upon success, you can either update the sleepEntries from the response or fetch updated data from the server.
@@ -83,6 +92,36 @@ console.log("userDataIn==>",data);
         .catch((error) => {
           console.error('Error adding sleep entry', error);
         });
+      }
+      else{
+
+        // const newEntryData = {
+        //   userId: id,
+        //   sleep_time: newEditEntry.sleepTime,
+        //   wake_up_time: newEditEntry.wakeUpTime,
+        //   total_time: newEditEntry.totalSleepDuration,
+        // };
+
+        console.log("new===>",newEntryData);
+        // console.log("entry",entryId);
+        axios.post(`http://localhost:5166/v1/editRecord/${id}`,newEntryData,{headers}) // Adjust the API endpoint
+        .then((response) => {
+          // Upon success, you can either update the sleepEntries from the response or fetch updated data from the server.
+          console.log("rerer",response);
+          // fetchSleepEntries();
+
+          
+        })
+        .catch((error) => {
+          console.error('Error adding sleep entry', error);
+        });
+        
+           setEdit(0);
+    
+      // If the div is already expanded, close it
+      // setExpandedEntryId(null);
+
+      }
   };
 
   // Function to delete a sleep entry
@@ -106,36 +145,38 @@ console.log("userDataIn==>",data);
   const editSleepEntry = (entryId, updatedEntry) => {
     // Make an API request to update the entry in your database
     // Then, update the 'sleepEntries' state with the updated entry
-    if (entryId === expandedEntryId) {
-        const newEntryData = {
-            userId: id,
-            sleep_time: newEditEntry.sleepTime,
-            wake_up_time: newEditEntry.wakeUpTime,
-            total_time: newEditEntry.totalSleepDuration,
-          };
 
-          console.log("new===>",newEntryData);
-          console.log("entry",entryId);
-          axios.post(`http://localhost:5166/v1/editRecord/${entryId}`,newEntryData,{headers}) // Adjust the API endpoint
-          .then((response) => {
-            // Upon success, you can either update the sleepEntries from the response or fetch updated data from the server.
-            console.log("rerer",response);
-            fetchSleepEntries();
+    setEdit(1);
+    // if (entryId === expandedEntryId) {
+    //     const newEntryData = {
+    //         userId: id,
+    //         sleep_time: newEditEntry.sleepTime,
+    //         wake_up_time: newEditEntry.wakeUpTime,
+    //         total_time: newEditEntry.totalSleepDuration,
+    //       };
+
+    //       console.log("new===>",newEntryData);
+    //       console.log("entry",entryId);
+          // axios.post(`http://localhost:5166/v1/editRecord/${entryId}`,newEntryData,{headers}) // Adjust the API endpoint
+          // .then((response) => {
+          //   // Upon success, you can either update the sleepEntries from the response or fetch updated data from the server.
+          //   console.log("rerer",response);
+          //   fetchSleepEntries();
 
             
-          })
-          .catch((error) => {
-            console.error('Error adding sleep entry', error);
-          });
+          // })
+          // .catch((error) => {
+          //   console.error('Error adding sleep entry', error);
+          // });
           
       
-        // If the div is already expanded, close it
-        setExpandedEntryId(null);
-      } else {      setSleepEntries()
+    //     // If the div is already expanded, close it
+    //     setExpandedEntryId(null);
+    //   } else {      //setSleepEntries()
 
-        // Otherwise, expand the div for the clicked entry
-        setExpandedEntryId(entryId);
-      }
+    //     // Otherwise, expand the div for the clicked entry
+    //     setExpandedEntryId(entryId);
+    //   }
   };
 
 
@@ -189,7 +230,7 @@ console.log("userDataIn==>",data);
         <input
           type="DATE"
           placeholder="Date"
-          value={JSON.stringify(newEntry.date)}
+          value={newEntry.date}
           onChange={(e) => setNewEntry({ ...newEntry, date: e.target.value })}
         />
      
@@ -213,7 +254,7 @@ console.log("userDataIn==>",data);
             setNewEntry({ ...newEntry, totalSleepDuration: e.target.value })
           }
         />
-        <button style={{marginLeft:'60px'}} onClick={addSleepEntry}>Add Entry</button>
+      {!isEdit?<button style={{marginLeft:'60px'}} onClick={addSleepEntry}>Add Entry</button>:<button style={{marginLeft:'60px'}} onClick={addSleepEntry}>edit Entry</button> }
       </form>
 
       {/* List of sleep entries */}  
@@ -234,7 +275,7 @@ console.log("userDataIn==>",data);
             </table>
 }
 
-            {expandedEntryId === entry.id && (
+            {/* {expandedEntryId === entry.id && (
               <div>
                 <table>
                   <tr>
@@ -278,7 +319,7 @@ console.log("userDataIn==>",data);
                   </tr>
                 </table>
               </div>
-            )}
+            )} */}
 
             {/* Edit and Delete buttons */}
             <button onClick={() => editSleepEntry(entry.id)}>Edit</button>
@@ -290,7 +331,7 @@ console.log("userDataIn==>",data);
       </ul>
 }
 
-<div><Pagination/></div>
+<div><Pagination  Comp={setSleepEntries}/></div>
     </div>
   );
 };
@@ -306,3 +347,8 @@ export default SleepTracker;
 // 2.auto filled 
 // 3.encrypted password
 // edit on the same 
+
+
+
+// learning points 
+// 1.u can send the set component to other place
