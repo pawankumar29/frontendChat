@@ -36,3 +36,11 @@
     
 }
 
+
+.Error{
+    color:red;
+    display:flex;
+    position:absolute;
+    top:90vh;
+    left:45vw;
+}

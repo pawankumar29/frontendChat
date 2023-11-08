@@ -11,6 +11,8 @@ function Login({onSuccess}) {
     password: '',
   });
 
+  const [error,setError]=useState(null)
+
   const [token,setToken]=useState(null)
   const location = useLocation(); 
   console.log("url:::",location.pathname)  ;
@@ -60,14 +62,20 @@ function Login({onSuccess}) {
         localStorage.removeItem("token");
 
         console.log("react-->",result.data.Error);
+        setError(result.data.Error);
+
+        console.log("error===>",error);
  
     }
 
     }
   catch (error) {
+    setError(error.message);
 
-        console.log("error>>==",error.message)
+        console.error("error>>==",error.message)
     }  };
+
+  
 
   return (
     <div className={style.mainDiv}>
@@ -104,8 +112,11 @@ function Login({onSuccess}) {
         </table>
       </form>
       <div style={{marginLeft:'100px'}}><Logout/></div>
+    
+      <div className={style.Error}>{error}</div>
 
     </div>
+
   );
 }
 

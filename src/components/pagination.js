@@ -53,6 +53,10 @@ console.log("userDataIn==>",data);
     getData();
   }, [offset]);
 
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
   return (
     <div className="App">
       <ReactPaginate

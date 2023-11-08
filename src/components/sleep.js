@@ -42,6 +42,8 @@ const Sleep = () => {
   const [isEdit, setEdit] = useState(0)  // only for changing the button 
 
   const [editId, setEditId] = useState(0);
+  const [deleteId, setDeleteId] = useState(0);
+
 
 
   const [newEntry, setNewEntry] = useState({
@@ -55,12 +57,26 @@ const Sleep = () => {
 
 
   //functions 
+  useEffect(() => {
+    axios.get(`http://localhost:5166/v1/getLatestRecord/${id}`,{headers}) // Adjust the API endpoint
+    .then((response) => {
+      // Upon success, you can either update the sleepEntries from the response or fetch updated data from the server.
+      console.log("rererSleep",response);
+      const d=response.data.data[0];
+      setNewEntry({id:d.id,date:d.date,sleepTime:d.sleep_time,wakeUpTime:d.wake_up_time,totalSleepDuration:d.total_time})
+
+      
+    })
+    .catch((error) => {
+      console.error('Error adding sleep entry', error);
+    });  }, []);
+
 
 
   // to add sleep entry
   const addSleepEntry = () => {
 
-
+  try{
     const newEntryData = {
       userId: id,
       sleep_time: newEntry.sleepTime,
@@ -106,6 +122,10 @@ const Sleep = () => {
 
 
     }
+  }
+  catch(error){
+     
+  }
   };
 
 
@@ -117,8 +137,9 @@ const deleteSleepEntry = (entryId) => {
   .then((response) => {
     // Upon success, you can either update the sleepEntries from the response or fetch updated data from the server.
     console.log("rerer",response);
+    setDeleteId(1);
     fetchSleepEntries();
-    
+           
   })
   .catch((error) => {
     console.error('Error adding sleep entry', error);
@@ -161,6 +182,12 @@ const deleteSleepEntry = (entryId) => {
     <div><Pagination Comp={setSleepEntries} /></div>
 
   }, [])
+
+  useEffect(() => {
+    //  fetchSleepEntries();
+    <div><Pagination Comp={setSleepEntries} /></div>
+
+  }, [deleteId])
 
 
   console.log("sleep===>", sleepEntries);
@@ -253,7 +280,6 @@ const deleteSleepEntry = (entryId) => {
 
 
       <div className={Style.page}><Pagination Comp={setSleepEntries} /></div>
-
 
 
     </div>

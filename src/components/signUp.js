@@ -11,6 +11,8 @@ function Signup() {
     age:''
   });
 
+  const [error,setError]=useState(null)
+
   const navigate=useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,7 +36,8 @@ function Signup() {
     }
   catch (error) {
 
-        console.log("error>>==",error.message)
+        console.log("error>>==",error)
+        setError(error.message)
     }
     }  
 
@@ -90,6 +93,7 @@ function Signup() {
         </table>
         </div>
       </form>
+      <div className={style.Error}>{error}</div>
 
     </div>
   );

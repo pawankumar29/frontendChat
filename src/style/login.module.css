@@ -27,3 +27,11 @@
 }
 
 
+.Error{
+    color:red;
+    display:flex;
+    position:absolute;
+    top:70vh;
+    left:46vw;
+}
+
