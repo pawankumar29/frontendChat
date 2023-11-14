@@ -7,8 +7,9 @@
     align-items: center;
     height: 100%;
     width: auto;
-    margin-top: 231px;;
-    font-size: 30px;
+    /* margin-top: 231px;; */
+    font-size: 50px;
+    font-weight: 300;
 
 }
 
@@ -31,7 +32,6 @@
     height:53px;
     font-size: 30px;
     text-decoration: none;
-  border: 1px solid red;
   margin-left: 200px;
     
 }
@@ -43,4 +43,13 @@
     position:absolute;
     top:90vh;
     left:45vw;
+}
+
+.mainDiv{
+    background-image: url('/home/user/Pictures/orgOne/h2.jpg');
+    background-size: cover;
+    width:100vw;
+    height:100vh;
+    color:black;
+    font-size:20px;
 }

@@ -3,6 +3,7 @@ import style from "../style/signup.module.css";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
+
 function Signup() {
   const [formData, setFormData] = useState({
     name: '',
@@ -29,10 +30,14 @@ function Signup() {
     password: '',
     age:''})
 
+    console.log("result===>",result)
+     if(result.data.status)
     setTimeout(()=>{
       navigate("/Login")
     },1000)
 
+    else
+        throw result.data.Error;
     }
   catch (error) {
 

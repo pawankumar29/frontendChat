@@ -1,12 +1,35 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Style from  "../style/friend.module.css"
 import Pagination from "./pagination";
+import { useNavigate } from "react-router-dom";
+import Logout from "./logout";
+
 function FriendFunction() {
 
+    const navigate=useNavigate();
+
+    const handlePageClick = (e) => {
+        const selectedPage = e.selected;
+        setOffset(selectedPage);
+      };
+
+      const [pageCount, setPageCount] = useState(0);
+      const [offset, setOffset] = useState(0);
+      const [perPage] = useState(2);
+
+
+      useEffect(() => {
+        getFriendDetail();
+      }, [offset]);
+
+
+
+      //-------------------------------------------------------
     const [friend, setFriend] = useState("");
     const [email, setEmail] = useState("");
+    const [error,setError]=useState("");
   const[detail,setdetail]=useState(0)
     const [sleepEntries,setSleepEntries]=useState([{
         id:"",
@@ -16,7 +39,6 @@ function FriendFunction() {
     }])
 
 
-    const api_url='http://localhost:5166/v1/getFriendRecord';
     const addFriend = async (e) => {
         try {
             e.preventDefault();
@@ -30,7 +52,13 @@ function FriendFunction() {
                 }
             })
                 .then((response) => {
-                    console.log("add===>", response.data.data);
+                    if(response.data.status)
+                    console.log("add===>", response);
+                else{
+                    setError(response.data.Error);
+                    throw {message:response.data.Error}
+
+                }
 
 
                 })
@@ -47,20 +75,67 @@ console.log("error:::",error);
 
     const getFriendDetail = async (e) => {
         try {
-            e.preventDefault();
+             //e.preventDefault();
+            setError("");
             const data = {
                 friend_email: email
             }
-            console.log(data);
-            axios.post(`http://localhost:5166/v1/getFriendRecord`, data, {
+
+            console.log("sjdksdjkfjdsjfkj===>",data);
+            axios.post(`http://localhost:5166/v1/getFriendRecord/${offset}`, data, {
                 headers: {
                     token: localStorage.getItem('token')
                 }
             })
                 .then((response) => {
                     console.log("add===>", response.data);
-                    setSleepEntries(response.data.data)
+                    // setSleepEntries(response.data.data)
                     setdetail(1)
+
+                    const data = response?.data?.data;
+                    console.log("dataInPage===>", response);
+                    console.log("dataFromBackend===>", data);
+                    if(data)
+                    setSleepEntries(data.rows)
+                    setPageCount(Math.ceil(data?.count / perPage));
+
+                })
+                .catch((error) => {
+                    console.error('Error adding sleep entry', error);
+                });
+
+        } catch (error) {
+console.log("error:::",error);
+        }
+
+
+    }
+
+    const getFriendDetail1 = async (e) => {
+        try {
+             e.preventDefault();
+            setError("");
+            const data = {
+                friend_email: email
+            }
+
+            console.log("sjdksdjkfjdsjfkj===>",data);
+            axios.post(`http://localhost:5166/v1/getFriendRecord/${offset}`, data, {
+                headers: {
+                    token: localStorage.getItem('token')
+                }
+            })
+                .then((response) => {
+                    console.log("add===>", response.data);
+                    // setSleepEntries(response.data.data)
+                    setdetail(1)
+
+                    const data = response?.data?.data;
+                    console.log("dataInPage===>", response);
+                    console.log("dataFromBackend===>", data);
+                    if(data)
+                    setSleepEntries(data.rows)
+                    setPageCount(Math.ceil(data?.count / perPage));
 
                 })
                 .catch((error) => {
@@ -80,6 +155,12 @@ console.log("error:::",error);
     return (
         <div className={Style.container}>
 
+<button className={Style.button1} onClick={()=>{
+  navigate('/chat')
+}}>chat</button>
+<div className={Style.button2} onClick={()=>{
+  navigate('/login')
+}}><Logout/></div>
         <form>
             <table>
                 <tr>
@@ -95,13 +176,13 @@ console.log("error:::",error);
                         setEmail(e.target.value)
                     }} /></td>
                     <td><button onClick={(e)=>{
-                        getFriendDetail(e);
+                        getFriendDetail1(e);
                     }}>Show Details</button></td>
 
                 </tr>
             </table>
             <div className={Style.data}>
-           { detail?
+         { detail?
                 sleepEntries &&  
                sleepEntries.map((e)=>{
                    
@@ -120,24 +201,14 @@ console.log("error:::",error);
             }
             </div>
         </form>
+           <div className={Style.Error}>{error?error:""}</div> 
 
 
-
-        <Pagination api_url={api_url}/>
+           <div className={Style.page}><Pagination handlePageClick={handlePageClick} pageCount={pageCount} /></div>
 
 </div>
 
     )
-
-
-
-
-
-
-
-
-
-
 
 }
 

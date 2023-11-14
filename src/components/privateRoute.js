@@ -24,6 +24,8 @@ const PrivateRoute = (props) => {
             setUserData(data.data);
             // Store userData in localStorage here
 
+            console.log("userDataInPrivateRoute===>",data.data)
+              localStorage.removeItem("userData");
             localStorage.setItem("userData", JSON.stringify(data.data));
           } else {
             console.error("Token is invalid:", data.Error);

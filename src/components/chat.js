@@ -1,13 +1,50 @@
 import io from "socket.io-client";
 import { useEffect, useState } from "react";
 import style from "../style/chat.module.css";
+import axios from "axios"
+import ShowMessage from "./showMessageComponent";
+import Pagination from "./pagination";
+
 const socket = io.connect("http://localhost:5166");
 
 function Chat() {
+  const userData = localStorage.getItem("userData");
+  const data = JSON.parse(userData);
+  console.log("userDataIn==>", data);
+  const id = data?.data.id;
   // Room State
   const [room, setRoom] = useState("");
   const [email, setEmail] = useState("");
   const [receiver, setReceiver] = useState("");
+  const [chats, setChats] = useState([
+    {
+      from: "",
+      to: "",
+      message: "",
+      id: "",
+      roomId: "",
+      id:""
+    },
+  ]);
+
+  console.log("chat:::",chats);
+
+  const [offset, setOffset] = useState(0);
+  const [perPage] = useState(5);
+  const [pageCount, setPageCount] = useState(0);
+  const [joined, setJoin] = useState(false);
+  const [msgSent, setMsgSent] = useState(false);
+
+
+
+
+  const handlePageClick = (e) => {
+    const selectedPage = e.selected;
+    console.log("offset::",e);
+
+    setOffset(selectedPage+1);
+    console.log("offset::",offset);
+  };
 
 
   // Messages States
@@ -16,28 +53,128 @@ function Chat() {
 
   const joinRoom = () => {
     if (room !== "") {
+      let data=localStorage.getItem("userData");
+      data = JSON.parse(data);
+  
+      console.log("localData===>",data?.data?.email)
       socket.emit("join_room", { email, room });
     }
+     if(!joined)
+     setJoin(false);
+    else
+    setJoin(true);
+
+
+    // let data=localStorage.getItem("userData");
+    // data = JSON.parse(data);
+
+    // console.log("localData===>",data?.data?.email)
     // Manually clear the input fields
     document.getElementById("emailInput").value = "";
     document.getElementById("roomInput").value = "";
+
   };
 
   const sendMessage = () => {
     socket.emit("send_message", { message, room,from:email,to:receiver });
     // Manually clear the message input field
+    
     document.getElementById("messageInput").value = "";
     document.getElementById("toInput").value = "";
 
+    setOffset(offset);
+    if(!msgSent)
+    setMsgSent(false)
+   else
+   setMsgSent(true)
   };
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
-
+        //  showMessage();
       setMessageReceived(data.message);
       console.log("messageReceived==>",data.message);
     });
   }, [socket]);
+
+  // while sending message 
+
+  useEffect(() => {
+    console.log("inside Joined ")
+    showMessage();
+  }, [joined]);
+
+  useEffect(() => {
+    console.log("inside msgsent");
+    showMessage();
+  }, [msgSent]);
+
+
+  const showMessage=async()=>{
+    
+      try {
+ 
+        const data={
+            from:parseInt(id),
+            to:parseInt(id)
+        }
+        console.log("offsetFromFrontend===>",`http://localhost:5166/v1/showMessage/${offset}`);
+
+
+        axios.post(`http://localhost:5166/v1/showMessage/${offset}`, data,{
+          headers: {
+              token: localStorage.getItem('token')
+          }
+      }).then((response)=>{
+        console.log("response===>",response);
+            setChats(response.data.data.rows);
+            const data=response?.data?.data;
+             setPageCount(Math.ceil(data?.count / perPage));
+
+
+      }).catch((error)=>{
+        console.log("errorInReq==>",error.message);
+      })
+        
+      } catch (error) {
+        console.log("error==>",error.message);
+
+      }
+      
+ 
+  }
+
+  useEffect(()=>{
+      try {
+
+        const data={
+            from:parseInt(id),
+            to:parseInt(id)
+        }
+        axios.post(`http://localhost:5166/v1/showMessage/${offset}`, data,{
+          headers: {
+              token: localStorage.getItem('token')
+          }
+      }).then((response)=>{
+        console.log("response===>",response);
+            setChats(response.data.data.rows);
+            const data=response?.data?.data;
+             setPageCount(Math.ceil(data?.count / perPage));
+
+
+      }).catch((error)=>{
+        console.log("errorInReq==>",error.message);
+      })
+        
+      } catch (error) {
+        console.log("error==>",error.message);
+
+      }
+  },[])
+
+  useEffect(()=>{
+    showMessage()
+  },[offset])
 
   return (
     <div className={style.App}>
@@ -77,7 +214,24 @@ function Chat() {
       <br />
 
       <h1> Message:</h1>
-      {messageReceived}
+         {chats&&
+       
+       chats.map((data)=>{
+        if(data.from===id){
+          
+          data.check=true;
+           return <ShowMessage data={data} />
+        }
+          else{
+
+            data.check=false;
+            return <ShowMessage data={data} />
+          }
+
+      })
+       }  
+             <div className={style.page}><Pagination handlePageClick={handlePageClick} pageCount={pageCount} /></div>
+
     </div>
   );
 }
@@ -85,5 +239,6 @@ function Chat() {
 export default Chat;
 
 
-// do not move like andha 
-//
+// when a object changes its state it renders
+
+

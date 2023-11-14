@@ -29,3 +29,26 @@ width:100%;
  justify-content: space-between;
 
 }
+
+
+.s1{
+    width:200px;
+    height:50px;
+    background-color: aqua;
+    border-radius: 120px;
+}
+
+
+body{
+    background-image: url('/home/user/Pictures/orgOne/h1.jpg');
+    background-size: cover;
+    width:100vw;
+    height:100vh;
+}
+
+
+li{
+    background-color: rgb(65, 70, 70);
+    color: rgb(84, 28, 28);
+    font-size: medium;
+}

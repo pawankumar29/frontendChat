@@ -1,0 +1,29 @@
+
+.from{
+    display:inline-flex;
+    background-color: rgb(125, 189, 125);
+   float:left;
+   padding:20px;
+   border:1px solid green;
+   margin-left: 10vw;
+   margin-bottom: 5px;
+   font-size: 20px;
+   font-weight: 700;
+}
+
+.to{
+    background-color: rgb(164, 104, 220);
+    color:white;
+    display:inline;
+    float:right;
+    padding:30px;
+    border:1px solid blueviolet;
+    margin-right: 10vw;
+    margin-bottom: 5px;
+    font-size: 20px;
+   font-weight: 700;
+
+
+
+ 
+}

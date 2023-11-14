@@ -48,6 +48,42 @@ ul{
 
 .data{
     position:absolute;
-    top:50vw;
+    top:70vh;
     left:30vw;
+}
+
+.Error{
+    color:red;
+    display:flex;
+    position:absolute;
+    top:50vh;
+    left:46vw;
+}
+
+.button1{
+    position: absolute;
+    top:2vh;
+    left:5vw;
+    width:200px;
+    background-color: blue;
+    border-radius: 100px;
+    color:aquamarine;
+    font-weight: 900;
+    font-size: larger;
+    height:50px;
+}
+
+.button2{
+    position: absolute;
+    top:2vh;
+    left:80vw;
+    height:2vh;
+
+}
+
+
+.page{
+    position:absolute;
+    top:50vh;
+    left:45vw;
 }

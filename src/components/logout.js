@@ -9,7 +9,8 @@ function Logout() {
         width:'130px',
         backgroundColor:'red',
         color:'white',
-        borderRadius:'130px'
+        borderRadius:'90px',
+        height:'50px'
      
     }
 
