@@ -5,7 +5,7 @@ import axios from "axios"
 import ShowMessage from "./showMessageComponent";
 import Pagination from "./pagination";
 
-const socket = io.connect("http://localhost:5166");
+const socket = io.connect("http://10.10.1.126:5166");
 
 function Chat() {
   const userData = localStorage.getItem("userData");
@@ -57,21 +57,22 @@ function Chat() {
       data = JSON.parse(data);
   
       console.log("localData===>",data?.data?.email)
-      socket.emit("join_room", { email, room });
+      setEmail(data?.data?.email)
+
+      socket.emit("join_room", { email:data?.data?.email, room });
     }
      if(!joined)
      setJoin(false);
     else
     setJoin(true);
 
-
     // let data=localStorage.getItem("userData");
     // data = JSON.parse(data);
 
     // console.log("localData===>",data?.data?.email)
     // Manually clear the input fields
-    document.getElementById("emailInput").value = "";
-    document.getElementById("roomInput").value = "";
+    // document.getElementById("emailInput").value = "";
+     document.getElementById("roomInput").value = "";
 
   };
 
@@ -81,7 +82,10 @@ function Chat() {
     
     document.getElementById("messageInput").value = "";
     document.getElementById("toInput").value = "";
-
+    setTimeout(() => {
+      
+    showMessage()
+    }, 400);
     setOffset(offset);
     if(!msgSent)
     setMsgSent(false)
@@ -121,12 +125,12 @@ function Chat() {
         console.log("offsetFromFrontend===>",`http://localhost:5166/v1/showMessage/${offset}`);
 
 
-        axios.post(`http://localhost:5166/v1/showMessage/${offset}`, data,{
+        axios.post(`http://10.10.1.126:5166/v1/showMessage/${offset}`, data,{
           headers: {
               token: localStorage.getItem('token')
           }
       }).then((response)=>{
-        console.log("response===>",response);
+        console.log("responseKkK===>",response);
             setChats(response.data.data.rows);
             const data=response?.data?.data;
              setPageCount(Math.ceil(data?.count / perPage));
@@ -151,13 +155,13 @@ function Chat() {
             from:parseInt(id),
             to:parseInt(id)
         }
-        axios.post(`http://localhost:5166/v1/showMessage/${offset}`, data,{
+        axios.post(`http://10.10.1.126:5166/v1/showMessage/${offset}`, data,{
           headers: {
               token: localStorage.getItem('token')
           }
       }).then((response)=>{
         console.log("response===>",response);
-            setChats(response.data.data.rows);
+        response.data.data.rows? setChats(response.data.data.rows):setChats("");
             const data=response?.data?.data;
              setPageCount(Math.ceil(data?.count / perPage));
 
@@ -178,14 +182,18 @@ function Chat() {
 
   return (
     <div className={style.App}>
-      <input
+      {/* <input
         placeholder="Email..."
         id="emailInput"
         onChange={(event) => {
           setEmail(event.target.value);
         }}
       />
-      <br />
+      <br /> */}
+
+<br />
+<br />
+<br />
 
       <input
         placeholder="Room Number..."

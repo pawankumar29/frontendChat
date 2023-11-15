@@ -27,7 +27,7 @@ function Login({onSuccess}) {
     e.preventDefault();
     try {
         console.log("formData",formData)
-    const result=await axios.post("http://localhost:5166/v1/Login",formData);
+    const result=await axios.post("http://10.10.1.126:5166/v1/Login",formData);
 
     setFormData({ 
     email: '',

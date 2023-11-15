@@ -94,7 +94,7 @@ const Sleep = () => {
 
   //functions 
   useEffect(() => {
-    axios.get(`http://localhost:5166/v1/getLatestRecord/${id}`, { headers }) // Adjust the API endpoint
+    axios.get(`http://10.10.1.126:5166/v1/getLatestRecord/${id}`, { headers }) // Adjust the API endpoint
       .then((response) => {
         // Upon success, you can either update the sleepEntries from the response or fetch updated data from the server.
         console.log("rererSleep", response);

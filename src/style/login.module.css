@@ -37,7 +37,7 @@
 
 .mainDiv{
     background-image: url('/home/user/Pictures/orgOne/h2.jpg');
-    background-size: cover;
+    background-size: contain;
     width:100vw;
     height:100vh;
     color:black;

@@ -15,7 +15,7 @@ console.log("messageInReact==>",data.message);
        {data.message}
     </div>:
 <div className={Style .to}>
-{data.message}
+{data.message}?{data.message}:""
 </div>
 
     }
